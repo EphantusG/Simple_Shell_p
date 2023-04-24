@@ -10,16 +10,18 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
 	int status;
 	pid_t pid;
 	char *envp[] = {NULL};
+	int int_mode = isatty(STDIN_FILENO);
+
 	argv = malloc(BUFFER_SIZE * sizeof(char *));
 
 	/*Start of while loop*/
         while (1)
 {
-        int int_mode = isatty(STDIN_FILENO);
 
    if (int_mode == 1)
    {
      write(STDOUT_FILENO,"Enter your Command:", 20);
+     fflush(stdout);
    }
    read = getline(&buff, &buff_mem, stdin);
 
