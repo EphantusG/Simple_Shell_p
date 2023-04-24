@@ -9,6 +9,7 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
 	char* token = NULL;
 	int status;
 	pid_t pid;
+	char *envp[] = {NULL};
 	argv = malloc(BUFFER_SIZE * sizeof(char *));
 
 	/*Start of while loop*/
@@ -47,7 +48,7 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
    }
    else if (pid == 0)
    {
-	   if(execv(argv[0], argv) == -1)
+	   if(execve(argv[0], argv, envp) == -1)
 	   {
 		   perror("Execution:");
 		   exit(EXIT_FAILURE);
@@ -57,9 +58,15 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
    else
    {
 	   waitpid(pid, &status, 0);
+	   if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+	   {
+		   fprintf(stderr,"Error: Enter a valid command\n");
+	   }
    }
    free(argv);
 free(buff);
+argv = malloc(BUFFER_SIZE * sizeof(char *));
+buff_mem = 0;
 }
 return (0);
 }
